@@ -6,13 +6,19 @@ import android.widget.TextView;
 
 import com.example.abdulqader.rxjavaretrofit.R;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class PostViewHolder extends RecyclerView.ViewHolder {
 
-    TextView title,body,auther;
+
+    @BindView(R.id.title) TextView title;
+    @BindView(R.id.content)TextView body;
+    @BindView(R.id.author)TextView auther;
+
+
     public PostViewHolder(View itemView) {
         super(itemView);
-        title=(TextView)itemView.findViewById(R.id.title);
-        body=(TextView)itemView.findViewById(R.id.content);
-        auther=(TextView)itemView.findViewById(R.id.author);
+        ButterKnife.bind(this, itemView);
     }
 }
