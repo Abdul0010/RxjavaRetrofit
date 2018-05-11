@@ -1,11 +1,13 @@
 package com.example.abdulqader.rxjavaretrofit;
 
+import android.arch.persistence.room.Room;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
 import com.example.abdulqader.rxjavaretrofit.Adapter.PostAdapter;
+import com.example.abdulqader.rxjavaretrofit.data.DatabaseImp;
 import com.example.abdulqader.rxjavaretrofit.model.post;
 import com.example.abdulqader.rxjavaretrofit.retrofit.Api;
 import com.example.abdulqader.rxjavaretrofit.retrofit.client;
@@ -24,6 +26,9 @@ public class MainActivity extends AppCompatActivity {
     RecyclerView recyclerView;
     CompositeDisposable compositeDisposable=new CompositeDisposable();
 
+    private static final String DATABASENAME="POST_DATABASE";
+    private DatabaseImp databaseImp;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,7 +39,16 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        FetchData();
+        databaseImp= Room.databaseBuilder(
+                getApplicationContext(),
+                DatabaseImp.class,
+                DATABASENAME
+        ).allowMainThreadQueries().fallbackToDestructiveMigration().
+                build();
+      //  FetchData();
+        showdatafromdatabase();
+
+
 
     }
 
@@ -52,6 +66,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void displaydata(List<post> posts) {
+
+        databaseImp.access().InsertMultiplePosts(posts);
+        PostAdapter adapter= new PostAdapter(this,posts);
+        recyclerView.setAdapter(adapter);
+    }
+
+    private void showdatafromdatabase(){
+       List<post>posts= databaseImp.access().getAllpost();
         PostAdapter adapter= new PostAdapter(this,posts);
         recyclerView.setAdapter(adapter);
     }

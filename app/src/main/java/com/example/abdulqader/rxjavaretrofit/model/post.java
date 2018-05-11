@@ -1,7 +1,14 @@
 package com.example.abdulqader.rxjavaretrofit.model;
 
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.PrimaryKey;
+import android.support.annotation.NonNull;
+
+@Entity
 public class post {
     public int userId ;
+    @NonNull
+    @PrimaryKey(autoGenerate = true)
     public int id ;
     public String title ;
     public String body;
